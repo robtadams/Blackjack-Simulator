@@ -11,7 +11,7 @@ from time import sleep
 
 # Game
 class Game():
-
+    
     # Card class
     class Card():
 
@@ -54,7 +54,7 @@ class Game():
 
         # Main loop 
         while self.running:
-
+            
             """ Betting """
 
             # Print balance
@@ -97,7 +97,7 @@ class Game():
             self.wallet += self.bet * outcome # <-- Moved self.Game() up a line
         
     def SetUp(self):
-
+        
         # Set up money
         self.wallet = 1000
 
@@ -109,27 +109,43 @@ class Game():
         # Loop
         while True:
             try: # Try the number of decks
-                deckNum = eval(input("How many decks are you playing with? :"))
+                self.deckNum = eval(input("How many decks are you playing with? :"))
 
             except: # If it isn't valid
                 print("That was not a valid input.")
 
             else: # If it is valid
-                if deckNum > 0:
+                if self.deckNum > 0:
                     break
                 else: 
                     print("That was not a valid input.")
-                            
+
+        self.buildDeck()
+
+    def buildDeck(self):
+                  
         self.deck = [] # Deck
-        for i in range(deckNum): # For every deck
+
+        print("Building deck", end="", flush=True)
+        for i in range(3):
+            sleep(0.7)
+            print(".", end="", flush=True)
+        sleep(1)
+        print("\n-------------------------------------------------------------------------------------")
+        
+        for i in range(self.deckNum): # For every deck
+            
             for j in range(13): # For every rank
+                
                 for k in ["d", "c", "h", "s"]: # For every suit
+                    
                     card = self.Card(1 + j, k) # Create a card
                     self.deck.append(card) # Add it to the deck
+                    
         shuffle(self.deck) # Shuffle deck
 
     def Game(self):
-
+        
         self.Start()
         isStanding = False
         isSplitting = False
@@ -230,10 +246,13 @@ class Game():
             print("The dealer has a total of {}, which is more than your total of {}. You lose.".format(self.dealerTotal, self.playerTotal))
             return -1 + outcome
 
-        
-            
+        self.buildDeck()
+
     def Hit(self, hand, total):
-        
+
+        if len(self.deck) == 0:
+            self.buildDeck()
+            
         card = self.deck.pop()
         hand.append(card)
 
